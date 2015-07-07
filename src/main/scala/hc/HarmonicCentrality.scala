@@ -1,4 +1,4 @@
-package HarmonicСentrality
+package hc
 
 import com.twitter.algebird.HyperLogLog
 

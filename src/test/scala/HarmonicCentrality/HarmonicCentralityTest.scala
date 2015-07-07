@@ -1,4 +1,4 @@
-package HarmonicСentrality
+package hc
 
 import org.scalatest._
 import org.scalatest.FunSuite
