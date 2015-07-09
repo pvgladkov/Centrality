@@ -13,16 +13,22 @@ var harmonic = new mutable.HashMap[Int, Int]() {
   override def default(key:Int) = 5
 }
 
-var t_steps_set = new mutable.HashMap[Int, mutable.HashMap[Int, HLL]]() {
-  override def default(key:Int) = new mutable.HashMap[Int, HLL]() {
-    override def default(key:Int) = hll.zero
+val t_steps_set = new mutable.HashMap[String, mutable.HashMap[Int, HLL]]() {
+  override def default(key:String) = new mutable.HashMap[Int, HLL]() {
+    override def default(key:Int) = new HyperLogLogMonoid(BIT_SIZE).zero
   }
 }
 
-t_steps_set(4)(4).estimatedSize.toInt
-
+t_steps_set(4.toString)(4).estimatedSize.toInt
 
 import scalax.collection.Graph
 import scalax.collection.GraphPredef._
-val g = Graph(1~2)
-g.edges
+val g = Graph(1~2, 3)
+for (node <- g.nodes.iterator){
+  val _item = node.toString().getBytes
+  t_steps_set(node.toString()) = new mutable.HashMap[Int, HLL]() {
+    override def default(key:Int) = new HyperLogLogMonoid(BIT_SIZE).zero
+  }
+  t_steps_set(node.toString())(0) += hll.create(_item)
+}
+t_steps_set.size
