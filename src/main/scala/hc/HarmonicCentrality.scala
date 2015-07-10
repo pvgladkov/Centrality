@@ -3,17 +3,18 @@ package hc
 import com.twitter.algebird._
 import collection.mutable
 import scalax.collection.Graph
+import scalax.collection.GraphEdge._
 
 
-trait HarmonicCentrality {
+object HarmonicCentrality {
 
-  def harmonic_centrality(G: Graph, max_distance: Int = 6):mutable.HashMap[String, Int] = {
+  def apply(G: Graph[Int, HyperEdge], max_distance: Int = 6):mutable.HashMap[String, Double] = {
 
     val BIT_SIZE = 12
     val hll = new HyperLogLogMonoid(BIT_SIZE)
 
-    val harmonic = new mutable.HashMap[String, Int]() {
-      override def default(key:String) = 0
+    val harmonic = new mutable.HashMap[String, Double]() {
+      override def default(key:String) = 0.toDouble
     }
 
     val t_steps_set = new mutable.HashMap[String, mutable.HashMap[Int, HLL]]() {
@@ -34,14 +35,19 @@ trait HarmonicCentrality {
 
     for (distance <- 1 to max_distance) {
       for (node <- G.nodes.iterator){
+
         t_steps_set(node.toString())(distance) += t_steps_set(node.toString())(distance - 1)
+
         for (next_node <- G.get(node).diSuccessors.iterator){
           t_steps_set(node.toString())(distance) += t_steps_set(next_node.toString())(distance - 1)
         }
 
-        val current = t_steps_set(node.toString())(distance).estimatedSize.toInt
-        val prev = t_steps_set(node.toString())(distance - 1).estimatedSize.toInt
-        harmonic(node.toString()) += (current - prev) / distance
+        val current = t_steps_set(node.toString())(distance).estimatedSize
+        val prev = t_steps_set(node.toString())(distance - 1).estimatedSize
+
+        harmonic(node.toString()) += BigDecimal((current - prev) / distance)
+          .setScale(5, BigDecimal.RoundingMode.HALF_UP)
+          .toDouble
       }
     }
 

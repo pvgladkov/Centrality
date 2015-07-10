@@ -5,8 +5,8 @@ val BIT_SIZE = 12
 val hll = new HyperLogLogMonoid(BIT_SIZE)
 var globalHll = hll.zero
 val ids_1 = Array(12, 4, 555, 4).map(_.toByteArray)
-val h = ids_1.map(id_array => hll.create(id_array)).reduce(_ + _)
-h.estimatedSize.toInt
+var h = ids_1.map(id_array => hll.create(id_array)).reduce(_ + _)
+h.estimatedSize.toDouble
 globalHll.estimatedSize.toInt
 
 var harmonic = new mutable.HashMap[Int, Int]() {
@@ -32,3 +32,10 @@ for (node <- g.nodes.iterator){
   t_steps_set(node.toString())(0) += hll.create(_item)
 }
 t_steps_set.size
+
+h += hll.create(3.toByteArray)
+h += hll.create(4.toByteArray)
+h.estimatedSize.toInt
+
+
+hll.create(4.toByteArray).estimatedSize
