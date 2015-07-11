@@ -6,9 +6,9 @@ import scalax.collection.Graph
 import scalax.collection.GraphEdge._
 import scalax.collection.GraphPredef._
 
-class HarmonicCentralityTest extends Suite {
+class HarmonicCentralityTest extends FunSuite {
 
-  def testGraph1(info: Informer) {
+  test("1") {
     val g = Graph[Int, HyperEdge](1~2, 1~3, 1~4, 2~3)
     val hc = new HarmonicCentrality[Int]
     val res = hc(g)
@@ -20,7 +20,7 @@ class HarmonicCentralityTest extends Suite {
     }
   }
 
-  def testGraph2(info: Informer) {
+  test("2") {
     val g = Graph[Int, HyperEdge](1~2, 2~3, 3~4, 2~4, 5~1)
     val hc = new HarmonicCentrality[Int]
     val res = hc(g)
@@ -32,7 +32,7 @@ class HarmonicCentralityTest extends Suite {
     }
   }
 
-  def testGraph3(info: Informer) {
+  test("3") {
     val g = Graph[Int, HyperEdge](1~>2, 2~>3, 3~>4, 2~>4, 5~1)
     val hc = new HarmonicCentrality[Int]
     val res = hc(g)
@@ -44,7 +44,7 @@ class HarmonicCentralityTest extends Suite {
     }
   }
 
-  def testGraph4(info: Informer) {
+  test("4") {
     val g = Graph[String, HyperEdge]("one"~>"two")
     val hc = new HarmonicCentrality[String]
     val res = hc(g)
