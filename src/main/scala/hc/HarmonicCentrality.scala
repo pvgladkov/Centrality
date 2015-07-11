@@ -6,9 +6,9 @@ import scalax.collection.Graph
 import scalax.collection.GraphEdge._
 
 
-class HarmonicCentrality[T] {
+object HarmonicCentrality {
 
-  def apply(G: Graph[T, HyperEdge], max_distance: Int = 6):mutable.HashMap[T, Double] = {
+  def apply[T](G: Graph[T, HyperEdge], maxDistance: Int = 6):mutable.HashMap[T, Double] = {
 
     val BIT_SIZE = 12
     val hll = new HyperLogLogMonoid(BIT_SIZE)
@@ -17,7 +17,7 @@ class HarmonicCentrality[T] {
       override def default(key:T) = 0.toDouble
     }
 
-    val t_steps_set = new mutable.HashMap[T, mutable.HashMap[Int, HLL]]() {
+    val tStepsSet = new mutable.HashMap[T, mutable.HashMap[Int, HLL]]() {
       override def default(key:T) = new mutable.HashMap[Int, HLL]() {
         override def default(key:Int) = new HyperLogLogMonoid(BIT_SIZE).zero
       }
@@ -26,24 +26,24 @@ class HarmonicCentrality[T] {
     for (node <- G.nodes.iterator){
       val _item = node.toString().getBytes
 
-      t_steps_set(node) = new mutable.HashMap[Int, HLL]() {
+      tStepsSet(node) = new mutable.HashMap[Int, HLL]() {
         override def default(key:Int) = new HyperLogLogMonoid(BIT_SIZE).zero
       }
 
-      t_steps_set(node)(0) += hll.create(_item)
+      tStepsSet(node)(0) += hll.create(_item)
     }
 
-    for (distance <- 1 to max_distance) {
+    for (distance <- 1 to maxDistance) {
       for (node <- G.nodes.iterator){
 
-        t_steps_set(node)(distance) += t_steps_set(node)(distance - 1)
+        tStepsSet(node)(distance) += tStepsSet(node)(distance - 1)
 
         for (next_node <- G.get(node).diSuccessors.iterator){
-          t_steps_set(node)(distance) += t_steps_set(next_node)(distance - 1)
+          tStepsSet(node)(distance) += tStepsSet(next_node)(distance - 1)
         }
 
-        val current = t_steps_set(node)(distance).estimatedSize
-        val prev = t_steps_set(node)(distance - 1).estimatedSize
+        val current = tStepsSet(node)(distance).estimatedSize
+        val prev = tStepsSet(node)(distance - 1).estimatedSize
 
         harmonic(node) += BigDecimal((current - prev) / distance)
           .setScale(5, BigDecimal.RoundingMode.HALF_UP)
