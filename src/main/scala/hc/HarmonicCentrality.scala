@@ -6,15 +6,15 @@ import scalax.collection.Graph
 import scalax.collection.GraphEdge._
 
 
-object HarmonicCentrality {
+class HarmonicCentrality[T] {
 
-  def apply(G: Graph[Int, HyperEdge], max_distance: Int = 6):mutable.HashMap[String, Double] = {
+  def apply(G: Graph[T, HyperEdge], max_distance: Int = 6):mutable.HashMap[T, Double] = {
 
     val BIT_SIZE = 12
     val hll = new HyperLogLogMonoid(BIT_SIZE)
 
-    val harmonic = new mutable.HashMap[String, Double]() {
-      override def default(key:String) = 0.toDouble
+    val harmonic = new mutable.HashMap[T, Double]() {
+      override def default(key:T) = 0.toDouble
     }
 
     val t_steps_set = new mutable.HashMap[String, mutable.HashMap[Int, HLL]]() {
@@ -45,7 +45,7 @@ object HarmonicCentrality {
         val current = t_steps_set(node.toString())(distance).estimatedSize
         val prev = t_steps_set(node.toString())(distance - 1).estimatedSize
 
-        harmonic(node.toString()) += BigDecimal((current - prev) / distance)
+        harmonic(node) += BigDecimal((current - prev) / distance)
           .setScale(5, BigDecimal.RoundingMode.HALF_UP)
           .toDouble
       }
