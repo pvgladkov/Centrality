@@ -1,4 +1,6 @@
-# Harmonic Centrality
+# Centrality
+
+## Harmonic Centrality
 
 Harmonic centrality of a node x is the sum of the reciprocal of the shortest path distances from all other nodes to x.
 
@@ -14,7 +16,7 @@ Example:
 import scalax.collection.Graph
 import scalax.collection.GraphEdge._
 import scalax.collection.GraphPredef._
-import hc.HarmonicCentrality
+import cc.p2k.centrality.HarmonicCentrality
 
 val g = Graph[Int, HyperEdge](1~2, 2~3, 3~4, 2~4, 5~1)
 val res = HarmonicCentrality[Int](g)

@@ -1,4 +1,4 @@
-package hc
+package cc.p2k.centrality
 
 import org.scalatest._
 

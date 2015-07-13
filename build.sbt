@@ -1,4 +1,4 @@
-name := "HarmonicCentrality"
+name := "Centrality"
 
 version := "1.0"
 

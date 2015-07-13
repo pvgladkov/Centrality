@@ -1,4 +1,4 @@
-package hc
+package cc.p2k.centrality
 
 import com.twitter.algebird._
 import collection.mutable
