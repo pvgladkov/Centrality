@@ -4,7 +4,7 @@
 
 Add to your ``build.sbt`` file:
 
-```
+```scala
 libraryDependencies += "cc.p2k" %% "centrality" % "1.0"
 ```
 
