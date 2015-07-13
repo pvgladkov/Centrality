@@ -1,5 +1,13 @@
 # Centrality
 
+## Install
+
+Add to your ``build.sbt`` file:
+
+```
+libraryDependencies += "cc.p2k" %% "centrality" % "1.0"
+```
+
 ## Harmonic Centrality
 
 Harmonic centrality of a node x is the sum of the reciprocal of the shortest path distances from all other nodes to x.
