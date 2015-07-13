@@ -1,5 +1,7 @@
 name := "Centrality"
 
+organization := "cc.p2k"
+
 version := "1.0"
 
 scalaVersion := "2.11.7"
